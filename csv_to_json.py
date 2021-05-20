@@ -1,0 +1,200 @@
+import csv
+import json
+
+# Define the header names so we can specify them when reading the CSV
+fieldnames = (
+    "Line","# Letter","Cz/theta","Cz/alpha","Cz/betaL","Cz/betaH","Cz/gamma","Fz/theta","Fz/alpha","Fz/betaL","Fz/betaH","Fz/gamma","Fp1/theta","Fp1/alpha","Fp1/betaL","Fp1/betaH","Fp1/gamma","F7/theta","F7/alpha","F7/betaL","F7/betaH","F7/gamma","F3/theta","F3/alpha","F3/betaL","F3/betaH","F3/gamma","FC1/theta","FC1/alpha","FC1/betaL","FC1/betaH","FC1/gamma","C3/theta","C3/alpha","C3/betaL","C3/betaH","C3/gamma","FC5/theta","FC5/alpha","FC5/betaL","FC5/betaH","FC5/gamma","FT9/theta","FT9/alpha","FT9/betaL","FT9/betaH","FT9/gamma","T7/theta","T7/alpha","T7/betaL","T7/betaH","T7/gamma","TP9/theta","TP9/alpha","TP9/betaL","TP9/betaH","TP9/gamma","CP5/theta","CP5/alpha","CP5/betaL","CP5/betaH","CP5/gamma","CP1/theta","CP1/alpha","CP1/betaL","CP1/betaH","CP1/gamma","P3/theta","P3/alpha","P3/betaL","P3/betaH","P3/gamma","P7/theta","P7/alpha","P7/betaL","P7/betaH","P7/gamma","O1/theta","O1/alpha","O1/betaL","O1/betaH","O1/gamma","Pz/theta","Pz/alpha","Pz/betaL","Pz/betaH","Pz/gamma","Oz/theta","Oz/alpha","Oz/betaL","Oz/betaH","Oz/gamma","O2/theta","O2/alpha","O2/betaL","O2/betaH","O2/gamma","P8/theta","P8/alpha","P8/betaL","P8/betaH","P8/gamma","P4/theta","P4/alpha","P4/betaL","P4/betaH","P4/gamma","CP2/theta","CP2/alpha","CP2/betaL","CP2/betaH","CP2/gamma","CP6/theta","CP6/alpha","CP6/betaL","CP6/betaH","CP6/gamma","TP10/theta","TP10/alpha","TP10/betaL","TP10/betaH","TP10/gamma","T8/theta","T8/alpha","T8/betaL","T8/betaH","T8/gamma","FT10/theta","FT10/alpha","FT10/betaL","FT10/betaH","FT10/gamma","FC6/theta","FC6/alpha","FC6/betaL","FC6/betaH","FC6/gamma","C4/theta","C4/alpha","C4/betaL","C4/betaH","C4/gamma","FC2/theta","FC2/alpha","FC2/betaL","FC2/betaH","FC2/gamma","F4/theta","F4/alpha","F4/betaL","F4/betaH","F4/gamma","F8/theta","F8/alpha","F8/betaL","F8/betaH","F8/gamma","Fp2/theta","Fp2/alpha","Fp2/betaL","Fp2/betaH","Fp2/gamma"
+)
+
+# Open both files so we can interact with them
+# Using the `with` keyword lets us close the files automatically after these
+# with blocks end and we're done writing and reading the files
+with open('./test.csv', 'r') as csvfile:
+    with open('./test.json', 'w') as jsonfile:
+        # `next` will simply skip over the header row in the csvfile
+        next(csvfile)
+        # We use the csv library to create a 'reader' of the file
+        # This reader patse through the csvfile and the headers
+        # and allow us to interact with it as a Python object
+        reader = csv.DictReader(csvfile, fieldnames)
+        # This creates an empty dictionary to hold the final set of
+        # data that we'll eventually dump into the JSON file
+        final_data = {}
+        # Now we use the reader to iterate over all the rows of the CSV
+        # (except for the header) and then keep the values we want
+        for row in reader:
+            # We also restructure the data so that it exists as
+            # a set of date keys with the value as a dictionary of
+            # different data elements from the CSV.
+            final_data[row["Line"]] = {
+                "Line": row["Line"],
+                "# Letter": row["# Letter"],
+                "Cz/theta": row["Cz/theta"],
+                "Cz/alpha": row["Cz/alpha"],
+                "Cz/betaL": row["Cz/betaL"],
+                "Cz/betaH": row["Cz/betaH"],
+                "Cz/gamma": row["Cz/gamma"],
+                "Fz/theta": row["Fz/theta"],
+                "Fz/alpha": row["Fz/alpha"],
+                "Fz/betaL": row["Fz/betaL"],
+                "Fz/betaH": row["Fz/betaH"],
+                "Fz/gamma": row["Fz/gamma"],
+                "Fp1/theta": row["Fp1/theta"],
+                "Fp1/alpha": row["Fp1/alpha"],
+                "Fp1/betaL": row["Fp1/betaL"],
+                "Fp1/betaH": row["Fp1/betaH"],
+                "Fp1/gamma": row["Fp1/gamma"],
+                "F7/theta": row["F7/theta"],
+                "F7/alpha": row["F7/alpha"],
+                "F7/betaL": row["F7/betaL"],
+                "F7/betaH": row["F7/betaH"],
+                "F7/gamma": row["F7/gamma"],
+                "F3/theta": row["F3/theta"],
+                "F3/alpha": row["F3/alpha"],
+                "F3/betaL": row["F3/betaL"],
+                "F3/betaH": row["F3/betaH"],
+                "F3/gamma": row["F3/gamma"],
+                "FC1/theta": row["FC1/theta"],
+                "FC1/alpha": row["FC1/alpha"],
+                "FC1/betaL": row["FC1/betaL"],
+                "FC1/betaH": row["FC1/betaH"],
+                "FC1/gamma": row["FC1/gamma"],
+                "C3/theta": row["C3/theta"],
+                "C3/alpha": row["C3/alpha"],
+                "C3/betaL": row["C3/betaL"],
+                "C3/betaH": row["C3/betaH"],
+                "C3/gamma": row["C3/gamma"],
+                "FC5/theta": row["FC5/theta"],
+                "FC5/alpha": row["FC5/alpha"],
+                "FC5/betaL": row["FC5/betaL"],
+                "FC5/betaH": row["FC5/betaH"],
+                "FC5/gamma": row["FC5/gamma"],
+                "FT9/theta": row["FT9/theta"],
+                "FT9/alpha": row["FT9/alpha"],
+                "FT9/betaL": row["FT9/betaL"],
+                "FT9/betaH": row["FT9/betaH"],
+                "FT9/gamma": row["FT9/gamma"],
+                "T7/theta": row["T7/theta"],
+                "T7/alpha": row["T7/alpha"],
+                "T7/betaL": row["T7/betaL"],
+                "T7/betaH": row["T7/betaH"],
+                "T7/gamma": row["T7/gamma"],
+                "TP9/theta": row["TP9/theta"],
+                "TP9/alpha": row["TP9/alpha"],
+                "TP9/betaL": row["TP9/betaL"],
+                "TP9/betaH": row["TP9/betaH"],
+                "TP9/gamma": row["TP9/gamma"],
+                "CP5/theta": row["CP5/theta"],
+                "CP5/alpha": row["CP5/alpha"],
+                "CP5/betaL": row["CP5/betaL"],
+                "CP5/betaH": row["CP5/betaH"],
+                "CP5/gamma": row["CP5/gamma"],
+                "CP1/theta": row["CP1/theta"],
+                "CP1/alpha": row["CP1/alpha"],
+                "CP1/betaL": row["CP1/betaL"],
+                "CP1/betaH": row["CP1/betaH"],
+                "CP1/gamma": row["CP1/gamma"],
+                "P3/theta": row["P3/theta"],
+                "P3/alpha": row["P3/alpha"],
+                "P3/betaL": row["P3/betaL"],
+                "P3/betaH": row["P3/betaH"],
+                "P3/gamma": row["P3/gamma"],
+                "P7/theta": row["P7/theta"],
+                "P7/alpha": row["P7/alpha"],
+                "P7/betaL": row["P7/betaL"],
+                "P7/betaH": row["P7/betaH"],
+                "P7/gamma": row["P7/gamma"],
+                "O1/theta": row["O1/theta"],
+                "O1/alpha": row["O1/alpha"],
+                "O1/betaL": row["O1/betaL"],
+                "O1/betaH": row["O1/betaH"],
+                "O1/gamma": row["O1/gamma"],
+                "Pz/theta": row["Pz/theta"],
+                "Pz/alpha": row["Pz/alpha"],
+                "Pz/betaL": row["Pz/betaL"],
+                "Pz/betaH": row["Pz/betaH"],
+                "Pz/gamma": row["Pz/gamma"],
+                "Oz/theta": row["Oz/theta"],
+                "Oz/alpha": row["Oz/alpha"],
+                "Oz/betaL": row["Oz/betaL"],
+                "Oz/betaH": row["Oz/betaH"],
+                "Oz/gamma": row["Oz/gamma"],
+                "O2/theta": row["O2/theta"],
+                "O2/alpha": row["O2/alpha"],
+                "O2/betaL": row["O2/betaL"],
+                "O2/betaH": row["O2/betaH"],
+                "O2/gamma": row["O2/gamma"],
+                "P8/theta": row["P8/theta"],
+                "P8/alpha": row["P8/alpha"],
+                "P8/betaL": row["P8/betaL"],
+                "P8/betaH": row["P8/betaH"],
+                "P8/gamma": row["P8/gamma"],
+                "P4/theta": row["P4/theta"],
+                "P4/alpha": row["P4/alpha"],
+                "P4/betaL": row["P4/betaL"],
+                "P4/betaH": row["P4/betaH"],
+                "P4/gamma": row["P4/gamma"],
+                "CP2/theta": row["CP2/theta"],
+                "CP2/alpha": row["CP2/alpha"],
+                "CP2/betaL": row["CP2/betaL"],
+                "CP2/betaH": row["CP2/betaH"],
+                "CP2/gamma": row["CP2/gamma"],
+                "CP6/theta": row["CP6/theta"],
+                "CP6/alpha": row["CP6/alpha"],
+                "CP6/betaL": row["CP6/betaL"],
+                "CP6/betaH": row["CP6/betaH"],
+                "CP6/gamma": row["CP6/gamma"],
+                "TP10/theta": row["TP10/theta"],
+                "TP10/alpha": row["TP10/alpha"],
+                "TP10/betaL": row["TP10/betaL"],
+                "TP10/betaH": row["TP10/betaH"],
+                "TP10/gamma": row["TP10/gamma"],
+                "T8/theta": row["T8/theta"],
+                "T8/alpha": row["T8/alpha"],
+                "T8/betaL": row["T8/betaL"],
+                "T8/betaH": row["T8/betaH"],
+                "T8/gamma": row["T8/gamma"],
+                "FT10/theta": row["FT10/theta"],
+                "FT10/alpha": row["FT10/alpha"],
+                "FT10/betaL": row["FT10/betaL"],
+                "FT10/betaH": row["FT10/betaH"],
+                "FT10/gamma": row["FT10/gamma"],
+                "FC6/theta": row["FC6/theta"],
+                "FC6/alpha": row["FC6/alpha"],
+                "FC6/betaL": row["FC6/betaL"],
+                "FC6/betaH": row["FC6/betaH"],
+                "FC6/gamma": row["FC6/gamma"],
+                "C4/theta": row["C4/theta"],
+                "C4/alpha": row["C4/alpha"],
+                "C4/betaL": row["C4/betaL"],
+                "C4/betaH": row["C4/betaH"],
+                "C4/gamma": row["C4/gamma"],
+                "FC2/theta": row["FC2/theta"],
+                "FC2/alpha": row["FC2/alpha"],
+                "FC2/betaL": row["FC2/betaL"],
+                "FC2/betaH": row["FC2/betaH"],
+                "FC2/gamma": row["FC2/gamma"],
+                "F4/theta": row["F4/theta"],
+                "F4/alpha": row["F4/alpha"],
+                "F4/betaL": row["F4/betaL"],
+                "F4/betaH": row["F4/betaH"],
+                "F4/gamma": row["F4/gamma"],
+                "F8/theta": row["F8/theta"],
+                "F8/alpha": row["F8/alpha"],
+                "F8/betaL": row["F8/betaL"],
+                "F8/betaH": row["F8/betaH"],
+                "F8/gamma": row["F8/gamma"],
+                "Fp2/theta": row["Fp2/theta"],
+                "Fp2/alpha": row["Fp2/alpha"],
+                "Fp2/betaL": row["Fp2/betaL"],
+                "Fp2/betaH": row["Fp2/betaH"],
+                "Fp2/gamma": row["Fp2/gamma"]
+            }
+
+
+        # Finally, we use the json library to output the final_data
+        # dictionary to the jsonfile we opened earlier
+        json.dump(final_data, jsonfile)
+        # And then we write a final newline to the end of the file
+        # (this is just a best practice)
+        jsonfile.write('\n')
